@@ -191,11 +191,25 @@
 
 
             //Select Category
-            string[] categoryNames = { allWords[0], allWords[17], allWords[34], allWords[51], allWords[68], allWords[85], allWords[102], allWords[119], allWords[136], allWords[153] };
             bool isValidInput = false;
             int chosenCategoryInt = 0;
             string[] categoryWords = new string[15];
             string[] selectedWords = new string[8];
+            //changing the amount of words in category will also change the location of the category title. The +2 comes from the category title and the "" space. Repeated elsewhere.
+            string[] categoryNames =
+                {
+                allWords[0],
+                allWords[1 * (categoryWords.Length + 2)],
+                allWords[2 * (categoryWords.Length + 2)],
+                allWords[3 * (categoryWords.Length + 2)],
+                allWords[4 * (categoryWords.Length + 2)],
+                allWords[5 * (categoryWords.Length + 2)],
+                allWords[6 * (categoryWords.Length + 2)],
+                allWords[7 * (categoryWords.Length + 2)],
+                allWords[8 * (categoryWords.Length + 2)],
+                allWords[9 * (categoryWords.Length + 2)]
+            };
+
             Random rand = new Random();
 
             Console.WriteLine("Choose a category by typing its name exactly:");
@@ -204,7 +218,7 @@
                 Console.WriteLine(categoryNames[i]);
             }
 
-            while (!isValidInput) 
+            while (!isValidInput)
             {
                 string? playerInput = Console.ReadLine();
                 if (categoryNames.Contains(playerInput))
@@ -224,10 +238,10 @@
             //Select 8 words from category, no repeats
             for (int i = 0; i < categoryWords.Length; i++)
             {
-                categoryWords[i] = allWords[(chosenCategoryInt * (categoryWords.Length+2)) + 1 + i];
-                //changing the amount of words in category will also increase here. The +2 comes from the category title and the "" space
+                categoryWords[i] = allWords[(chosenCategoryInt * (categoryWords.Length + 2)) + 1 + i];
+                
             }
-            
+
             for (int i = 0; i < selectedWords.Length; i++)
             {
                 string possibleWord;
@@ -250,9 +264,72 @@
 
             //output 20x20 grid of "."
             Console.WriteLine("Word Search *naked edition*:");
+            //substrings??
+            string[] blankBoard =
+            {
+                "....................",
+                "....................",
+                "....................",
+                "....................",
+                "....................",
+                "....................",
+                "....................",
+                "....................",
+                "....................",
+                "....................",
+                "....................",
+                "....................",
+                "....................",
+                "....................",
+                "....................",
+                "....................",
+                "....................",
+                "....................",
+                "....................",
+                "....................",
+                "....................",
+            };
 
-            //string[,]??
-                //substrings??
+            int randomY = 0;
+            int randomX = 0;
+            int wordLength = 0;
+
+            for (int i = 0; i < selectedWords.Length; i++)
+            {
+               randomY = rand.Next(0, blankBoard.Length);
+               randomX = rand.Next(0, 19);
+               wordLength = selectedWords[i].Length;
+                
+                //Write forward
+                if ((20 - randomX) < wordLength)
+                {
+                    i--;
+                    continue;
+                }
+                else
+                {
+                    //Checks all locations for any existing letters
+                    bool hasSpace = false;
+                    foreach (char character in selectedWords[i])
+                    {
+                        if (!(blankBoard[randomY].Substring(randomX + i, 1) == "."))
+                        {
+                            hasSpace = true;
+                            break;
+                        }
+                    }
+                    if (hasSpace)
+                    {
+                        blankBoard[randomY] = blankBoard[randomY].Substring(0, randomX) + selectedWords[i] + blankBoard[randomY].Substring(randomX + selectedWords[i].Length);
+                        Console.WriteLine(blankBoard[randomY]);
+                        continue;
+                    }
+
+                }
+                //Write backwards
+
+
+            }
         }
     }
 }
