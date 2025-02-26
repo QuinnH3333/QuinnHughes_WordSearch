@@ -198,21 +198,20 @@
             string[] selectedWords = new string[8];
             Random rand = new Random();
 
-            Console.WriteLine("Choose a category by selecting its number:");
+            Console.WriteLine("Choose a category by typing its name exactly:");
             for (int i = 0; i < categoryNames.Length; i++)
             {
-                Console.WriteLine((i + 1) + ". " + categoryNames[i]);
+                Console.WriteLine(categoryNames[i]);
             }
 
-            while (!isValidInput)
-                if (int.TryParse(Console.ReadLine(), out int playerInput) && (playerInput <= categoryNames.Length + 1)) //If input was an int, output int.
+            while (!isValidInput) 
+            {
+                string? playerInput = Console.ReadLine();
+                if (categoryNames.Contains(playerInput))
                 {
-                    if ((playerInput <= 0) || (playerInput > categoryNames.Length))
-                    {
-                        Console.WriteLine("Invalid input. Try again.");
-                        continue;
-                    }
-                    chosenCategoryInt = playerInput - 1;
+
+                    chosenCategoryInt = Array.IndexOf(categoryNames, playerInput); //In the array categoryNames, finds the Index number of playerInput
+                    //should remove
                     Console.WriteLine("You selected category: " + categoryNames[chosenCategoryInt]);
                     isValidInput = true;
                 }
@@ -220,13 +219,15 @@
                 {
                     Console.WriteLine("Invalid input. Try again.");
                 }
+            }
 
             //Select 8 words from category, no repeats
             for (int i = 0; i < categoryWords.Length; i++)
             {
-                categoryWords[i] = allWords[(chosenCategoryInt * 17) + 1 + i];
+                categoryWords[i] = allWords[(chosenCategoryInt * (categoryWords.Length+2)) + 1 + i];
+                //changing the amount of words in category will also increase here. The +2 comes from the category title and the "" space
             }
-
+            
             for (int i = 0; i < selectedWords.Length; i++)
             {
                 string possibleWord;
@@ -241,13 +242,17 @@
                     else
                     {
                         selectedWords[i] = possibleWord;
-                        Console.WriteLine(possibleWord + selectedWords[i]);
+                        Console.WriteLine(selectedWords[i]);
                         break;
                     }
                 }
-
-
             }
+
+            //output 20x20 grid of "."
+            Console.WriteLine("Word Search *naked edition*:");
+
+            //string[,]??
+                //substrings??
         }
     }
 }
