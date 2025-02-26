@@ -1,12 +1,14 @@
 ﻿namespace QuinnHughes_WordSearch
-{ using System.IO;
+{
+    using System.IO;
     internal class Program
     {
         static void Main(string[] args)
         {
-            writeToFile();
+            WriteToFile();
+            StartWS();
         }
-        private static void writeToFile()
+        private static void WriteToFile()
         {
             string wordsFilePath = "words.txt";
             string[] allWords =
@@ -182,6 +184,70 @@
           "Endearment",
       };
             File.WriteAllLines(wordsFilePath, allWords);
+        }
+        static void StartWS()
+        {
+            string[] allWords = File.ReadAllLines("words.txt");
+
+
+            //Select Category
+            string[] categoryNames = { allWords[0], allWords[17], allWords[34], allWords[51], allWords[68], allWords[85], allWords[102], allWords[119], allWords[136], allWords[153] };
+            bool isValidInput = false;
+            int chosenCategoryInt = 0;
+            string[] categoryWords = new string[15];
+            string[] selectedWords = new string[8];
+            Random rand = new Random();
+
+            Console.WriteLine("Choose a category by selecting its number:");
+            for (int i = 0; i < categoryNames.Length; i++)
+            {
+                Console.WriteLine((i + 1) + ". " + categoryNames[i]);
+            }
+
+            while (!isValidInput)
+                if (int.TryParse(Console.ReadLine(), out int playerInput) && (playerInput <= categoryNames.Length + 1)) //If input was an int, output int.
+                {
+                    if ((playerInput <= 0) || (playerInput > categoryNames.Length))
+                    {
+                        Console.WriteLine("Invalid input. Try again.");
+                        continue;
+                    }
+                    chosenCategoryInt = playerInput - 1;
+                    Console.WriteLine("You selected category: " + categoryNames[chosenCategoryInt]);
+                    isValidInput = true;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Try again.");
+                }
+
+            //Select 8 words from category, no repeats
+            for (int i = 0; i < categoryWords.Length; i++)
+            {
+                categoryWords[i] = allWords[(chosenCategoryInt * 17) + 1 + i];
+            }
+
+            for (int i = 0; i < selectedWords.Length; i++)
+            {
+                string possibleWord;
+                possibleWord = categoryWords[rand.Next(0, 14)];
+                foreach (string word in selectedWords)
+                {
+                    if (selectedWords.Contains(possibleWord))
+                    {
+                        i--;
+                        break;
+                    }
+                    else
+                    {
+                        selectedWords[i] = possibleWord;
+                        Console.WriteLine(possibleWord + selectedWords[i]);
+                        break;
+                    }
+                }
+
+
+            }
         }
     }
 }
