@@ -1,6 +1,9 @@
 ﻿namespace QuinnHughes_WordSearch
 {
+    using System;
     using System.IO;
+    using System.Reflection.Metadata;
+
     internal class Program
     {
         static void Main(string[] args)
@@ -256,7 +259,6 @@
                     else
                     {
                         selectedWords[i] = possibleWord;
-                        Console.WriteLine(selectedWords[i]);
                         break;
                     }
                 }
@@ -293,34 +295,59 @@
             int randomY = 0;
             int randomX = 0;
             int wordLength = 0;
-            int spacesOpen;
-            bool wordCanFit;
+            int spacesOpen = 0;
+            bool wordCanFit = false;
+            int randomPrintDirection;
 
-
-            for (int i = 0; i < (selectedWords.Length); i++) //This is right
+            foreach (string word in selectedWords)
             {
+                string selectedWordForward = word;
+                string selectedWordBackward = ReverseWord(word);
 
+                randomPrintDirection = rand.Next(0, 2); //max is exclusive 
+
+                switch (randomPrintDirection)
+                {
+                    case 0:
+                        Horizontal(randomY, randomX, blankBoard, selectedWordForward, wordLength, spacesOpen, wordCanFit, rand);
+                        break;
+                    case 1:
+                        Horizontal(randomY, randomX, blankBoard, selectedWordBackward, wordLength, spacesOpen, wordCanFit, rand);
+                        break;
+                }
+            }
+            for (int i = 0; i < blankBoard.Length; i++)
+            {
+                Console.WriteLine(blankBoard[i]);
+            }
+
+        }
+        static void Horizontal(int randomY, int randomX, string[] blankBoard, string wordDirectional, int selectedWordLength, int spacesOpen, bool wordCanFit, Random rand)
+        {
+            for (int i = 0; i <= 0; i++)
+            {
                 randomY = rand.Next(0, blankBoard.Length);
-                randomX = rand.Next(0, 19);
-                wordLength = selectedWords[i].Length;
+                randomX = rand.Next(0, 20);
+                selectedWordLength = wordDirectional.Length;
+
 
                 spacesOpen = 0;
                 wordCanFit = false;
-                if ((20 - randomX) < wordLength)
+                if ((20 - randomX) < selectedWordLength)
                 {
                     i--;
                     continue;
                 }
                 else
                 {
-                    for (int j = 0; j < wordLength; j++) //for how ever many letter in your word 
+                    for (int j = 0; j < selectedWordLength; j++) //for how ever many letter in your word 
                     {
                         if (blankBoard[randomY].Substring(randomX + j, 1) == ".") //if the char is a "."
                         {
-                           //move to next char
+                            //move to next char
                             spacesOpen++;
                         }
-                        if (spacesOpen == wordLength)
+                        if (spacesOpen == selectedWordLength)
                         {
                             wordCanFit = true;
                             break;
@@ -330,23 +357,26 @@
 
                 if (wordCanFit == true)
                 {
-                    //Im merging strings, should I be rewriting each char using substrings? i++ i--?
-                    blankBoard[randomY] = blankBoard[randomY].Substring(0, randomX) + selectedWords[i] + blankBoard[randomY].Substring(randomX + wordLength);
+                    blankBoard[randomY] = blankBoard[randomY].Substring(0, randomX) + wordDirectional + blankBoard[randomY].Substring(randomX + selectedWordLength);
                     continue;
-
                 }
                 else
                 {
                     i--;
                 }
             }
-
-            for (int i = 0; i < blankBoard.Length; i++)
-            {
-                Console.WriteLine(blankBoard[i]);
-            }
-
         }
+        static string ReverseWord(string word)
+        {
+            string reversedWord = "";
+            for (int i = word.Length; i > 0; i--)
+            {
+                reversedWord = reversedWord + word[i - 1];
+            }
+            return reversedWord;
+        }
+
     }
 }
+
 
