@@ -239,7 +239,7 @@
             for (int i = 0; i < categoryWords.Length; i++)
             {
                 categoryWords[i] = allWords[(chosenCategoryInt * (categoryWords.Length + 2)) + 1 + i];
-                
+
             }
 
             for (int i = 0; i < selectedWords.Length; i++)
@@ -263,7 +263,7 @@
             }
 
             //output 20x20 grid of "."
-            Console.WriteLine("Word Search *naked edition*:");
+            Console.WriteLine("Word Search *now with dots!*");
             //substrings??
             string[] blankBoard =
             {
@@ -293,14 +293,19 @@
             int randomY = 0;
             int randomX = 0;
             int wordLength = 0;
+            int spacesOpen;
+            bool wordCanFit;
 
-            for (int i = 0; i < selectedWords.Length; i++)
+
+            for (int i = 0; i < (selectedWords.Length); i++) //This is right
             {
 
-               randomY = rand.Next(0, blankBoard.Length);
-               randomX = rand.Next(0, 19);
-               wordLength = selectedWords[i].Length;
+                randomY = rand.Next(0, blankBoard.Length);
+                randomX = rand.Next(0, 19);
+                wordLength = selectedWords[i].Length;
 
+                spacesOpen = 0;
+                wordCanFit = false;
                 if ((20 - randomX) < wordLength)
                 {
                     i--;
@@ -308,34 +313,40 @@
                 }
                 else
                 {
-                    //Checks all locations for any existing letters
-                  
-
-
-                   /* bool hasSpace = false;
-                    foreach  (char character in selectedWords[i])
+                    for (int j = 0; j < wordLength; j++) //for how ever many letter in your word 
                     {
-                        int j = 0;
-                        // selected
-                        if (!(blankBoard[randomY].Substring(randomX + j, 1) == ".")) 
+                        if (blankBoard[randomY].Substring(randomX + j, 1) == ".") //if the char is a "."
                         {
-                            j++;
-                            hasSpace = true; //this still only checks one???
+                           //move to next char
+                            spacesOpen++;
+                        }
+                        if (spacesOpen == wordLength)
+                        {
+                            wordCanFit = true;
                             break;
                         }
-                    }*/
-
-                        blankBoard[randomY] = blankBoard[randomY].Substring(0, randomX) + selectedWords[i] + blankBoard[randomY].Substring(randomX + selectedWords[i].Length);
-                        Console.WriteLine(blankBoard[randomY]);
-                    //Somehow placing it twice?? check where i-- too much?
-                        continue;
-                    
-
+                    }
                 }
 
+                if (wordCanFit == true)
+                {
+                    //Im merging strings, should I be rewriting each char using substrings? i++ i--?
+                    blankBoard[randomY] = blankBoard[randomY].Substring(0, randomX) + selectedWords[i] + blankBoard[randomY].Substring(randomX + wordLength);
+                    continue;
 
-
+                }
+                else
+                {
+                    i--;
+                }
             }
+
+            for (int i = 0; i < blankBoard.Length; i++)
+            {
+                Console.WriteLine(blankBoard[i]);
+            }
+
         }
     }
 }
+
