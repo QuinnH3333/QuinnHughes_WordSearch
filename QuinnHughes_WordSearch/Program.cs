@@ -296,11 +296,11 @@
 
             for (int i = 0; i < selectedWords.Length; i++)
             {
+
                randomY = rand.Next(0, blankBoard.Length);
                randomX = rand.Next(0, 19);
                wordLength = selectedWords[i].Length;
-                
-                //Write forward
+
                 if ((20 - randomX) < wordLength)
                 {
                     i--;
@@ -309,24 +309,30 @@
                 else
                 {
                     //Checks all locations for any existing letters
-                    bool hasSpace = false;
-                    foreach (char character in selectedWords[i])
+                  
+
+
+                   /* bool hasSpace = false;
+                    foreach  (char character in selectedWords[i])
                     {
-                        if (!(blankBoard[randomY].Substring(randomX + i, 1) == "."))
+                        int j = 0;
+                        // selected
+                        if (!(blankBoard[randomY].Substring(randomX + j, 1) == ".")) 
                         {
-                            hasSpace = true;
+                            j++;
+                            hasSpace = true; //this still only checks one???
                             break;
                         }
-                    }
-                    if (hasSpace)
-                    {
+                    }*/
+
                         blankBoard[randomY] = blankBoard[randomY].Substring(0, randomX) + selectedWords[i] + blankBoard[randomY].Substring(randomX + selectedWords[i].Length);
                         Console.WriteLine(blankBoard[randomY]);
+                    //Somehow placing it twice?? check where i-- too much?
                         continue;
-                    }
+                    
 
                 }
-                //Write backwards
+
 
 
             }
