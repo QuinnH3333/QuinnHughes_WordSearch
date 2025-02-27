@@ -3,6 +3,7 @@
     using System;
     using System.IO;
     using System.Reflection.Metadata;
+    using static System.Runtime.InteropServices.JavaScript.JSType;
 
     internal class Program
     {
@@ -135,7 +136,7 @@
           "Alune",
           "Lest",
           "",
-          "Yordle Champions",
+          "YordleChampions",
           "Teemo",
           "Tristana",
           "Veigar",
@@ -216,7 +217,6 @@
                 allWords[8 * (categoryWords.Length + 2)],
                 allWords[9 * (categoryWords.Length + 2)]
             };
-
             selectedCategoryIndex = PlayerInputIndex(categoryNames);
 
             //Select 8 words from category, no repeats
@@ -304,12 +304,28 @@
             }
             for (int i = 0; i < blankBoard.Length; i++)
             {
-                Console.WriteLine(i + " " + blankBoard[i]);
+                if (i < 10) { Console.WriteLine(i + "  " + blankBoard[i]); }
+                else { Console.WriteLine(i + " " + blankBoard[i]); }
+
             }
 
-            //Player guess
-            PlayerInputIndex(selectedWords);
 
+            //Player guess
+            //declarations
+            int guessedWordIndex = PlayerInputIndex(selectedWords);
+            int guessedX;
+            int guessedY;
+            string[] directions = { "up", "down", "forwards", "backwards" };
+            int guessedDirection;
+
+            Console.WriteLine("What column (horizontal position) is the beginning of the word?");
+            guessedX = PlayerInputInt(0, blankBoard[1].Length);
+            Console.WriteLine("What Row (Vertical position) is the beginning of the word?");
+            guessedY = PlayerInputInt(0, blankBoard[1].Length);
+
+            guessedDirection = PlayerInputIndex(directions);
+
+            Console.WriteLine(selectedWords[guessedWordIndex] + " " + directions[guessedDirection] + " at " + "(" + guessedX + ", " + guessedY + ")");
 
         }
         /// <summary>
@@ -443,7 +459,7 @@
             return reversedWord;
         }
         /// <summary>
-        /// Outputs options of string array, Finds the Index of a player's input in a string array
+        /// Outputs options of string array, Finds the Index of a player's input in a string array. 
         /// Loops until an input matches, not case or null sensitive
         /// </summary>
         /// <param name="array">string array with the options of the</param>
@@ -477,6 +493,35 @@
                 }
             }
             return InputIndexNumber;
+        }
+
+        static int PlayerInputInt(int rangeMin, int rangeMax)
+        {
+            int parsedInt = 0;
+            bool isValidInput = false;
+            while (!isValidInput)
+            {
+                if (int.TryParse(Console.ReadLine(), out int playerInput)) //If parse success, move onto range check
+                {
+                    if ((playerInput > rangeMin) && (playerInput <= rangeMax))
+                    {
+                        parsedInt = playerInput;
+                        isValidInput = true;
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Number out of bounds. Pick between 1-20");
+                        continue;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Try again.");
+                }
+            }
+
+            return parsedInt;
         }
     }
 }
