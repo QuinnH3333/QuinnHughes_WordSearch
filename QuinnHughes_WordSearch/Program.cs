@@ -198,8 +198,7 @@
 
             //Declarations for categories and word selection
             Random rand = new Random();
-            bool isValidInput = false;
-            int chosenCategoryInt = 0;
+            int selectedCategoryIndex = 0;
             string[] categoryWords = new string[15];
             string[] selectedWords = new string[8];
             //changing the amount of words in category will also change the location of the category title.
@@ -218,31 +217,12 @@
                 allWords[9 * (categoryWords.Length + 2)]
             };
 
-            Console.WriteLine("Choose a category by typing its name exactly:");
-            for (int i = 0; i < categoryNames.Length; i++)
-            {
-                Console.WriteLine(categoryNames[i]);
-            }
-
-            while (!isValidInput)
-            {
-                string? playerInput = Console.ReadLine();
-                if (categoryNames.Contains(playerInput))
-                {
-
-                    chosenCategoryInt = Array.IndexOf(categoryNames, playerInput); //In the array categoryNames, finds the Index number of playerInput
-                    isValidInput = true;
-                }
-                else
-                {
-                    Console.WriteLine("Invalid input. Try again.");
-                }
-            }
+            selectedCategoryIndex = PlayerInputIndex(categoryNames);
 
             //Select 8 words from category, no repeats
             for (int i = 0; i < categoryWords.Length; i++)
             {
-                categoryWords[i] = allWords[(chosenCategoryInt * (categoryWords.Length + 2)) + 1 + i];
+                categoryWords[i] = allWords[(selectedCategoryIndex * (categoryWords.Length + 2)) + 1 + i];
             }
 
             for (int i = 0; i < selectedWords.Length; i++)
@@ -328,7 +308,8 @@
             }
 
             //Player guess
-            //foreach (string word in selectedWords)
+            PlayerInputIndex(selectedWords);
+
 
         }
         /// <summary>
@@ -375,7 +356,10 @@
 
                 if (wordCanFit == true)
                 {
-                    blankBoard[randomY] = blankBoard[randomY].Substring(0, randomX) + wordDirectional + blankBoard[randomY].Substring(randomX + selectedWordLength);
+                    blankBoard[randomY] =
+                        blankBoard[randomY].Substring(0, randomX)
+                        + wordDirectional
+                        + blankBoard[randomY].Substring(randomX + selectedWordLength);
                     break;
                 }
                 else
@@ -430,7 +414,10 @@
                 {
                     for (int j = 0; j < selectedWordLength; j++)
                     {
-                        blankBoard[randomY + j] = blankBoard[randomY + j].Substring(0, randomX) + wordDirectional[j] + blankBoard[randomY + j].Substring(randomX + 1);
+                        blankBoard[randomY + j] =
+                            blankBoard[randomY + j].Substring(0, randomX)
+                            + wordDirectional[j]
+                            + blankBoard[randomY + j].Substring(randomX + 1);
                     }
                     break;
                 }
@@ -454,6 +441,42 @@
                 reversedWord = reversedWord + word[i - 1];
             }
             return reversedWord;
+        }
+        /// <summary>
+        /// Outputs options of string array, Finds the Index of a player's input in a string array
+        /// Loops until an input matches, not case or null sensitive
+        /// </summary>
+        /// <param name="array">string array with the options of the</param>
+        /// <returns>Index of the input given by the player</returns>
+        static int PlayerInputIndex(string[] array)
+        {
+            Console.WriteLine("Please type one of these options:");
+            int i = 0;
+            foreach (string word in array)
+            {
+
+                Console.WriteLine(word);
+                array[i] = word.ToUpper();
+                i++;
+            }
+
+            int InputIndexNumber = 0;
+            bool isValidInput = false;
+            while (!isValidInput)
+            {
+                string? playerInput = Console.ReadLine().ToUpper();
+
+                if (array.Contains(playerInput))
+                {
+                    InputIndexNumber = Array.IndexOf(array, playerInput); //In the array categoryNames, finds the Index number of playerInput
+                    isValidInput = true;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Try again.");
+                }
+            }
+            return InputIndexNumber;
         }
     }
 }
