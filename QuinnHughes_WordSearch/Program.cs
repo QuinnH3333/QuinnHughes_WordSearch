@@ -304,12 +304,12 @@
                 string selectedWordForward = word;
                 string selectedWordBackward = ReverseWord(word);
 
-                randomPrintDirection = rand.Next(0, 2); //max is exclusive 
+                randomPrintDirection = 0;//rand.Next(0, 5); //max is exclusive true range is min to max-1
 
                 switch (randomPrintDirection)
                 {
                     case 0:
-                        Horizontal(randomY, randomX, blankBoard, selectedWordForward, wordLength, spacesOpen, wordCanFit, rand);
+                        Vertical(randomY, randomX, blankBoard, selectedWordForward, wordLength, spacesOpen, wordCanFit, rand);
                         break;
                     case 1:
                         Horizontal(randomY, randomX, blankBoard, selectedWordBackward, wordLength, spacesOpen, wordCanFit, rand);
@@ -364,6 +364,53 @@
                 {
                     i--;
                 }
+            }
+        }
+        static void Vertical(int randomY, int randomX, string[] blankBoard, string wordDirectional, int selectedWordLength, int spacesOpen, bool wordCanFit, Random rand)
+        {
+            for (int i = 0; i <= 0; i++)
+            {
+                randomY = rand.Next(0, blankBoard.Length);
+                randomX = rand.Next(0, 20);
+                selectedWordLength = wordDirectional.Length;
+
+
+                spacesOpen = 0;
+                wordCanFit = false;
+                if ((20 - randomY) < selectedWordLength)
+                {
+                    i--;
+                    continue;
+                }
+                else
+                {
+                    for (int j = 0; j < selectedWordLength; j++) //for how ever many letter in your word 
+                    {
+                        if (blankBoard[randomY + j].Substring(randomX, 1) == ".") //if the char is a "."
+                        {
+                            spacesOpen++;
+                        }
+                        if (spacesOpen == selectedWordLength)
+                        {
+                            wordCanFit = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (wordCanFit == true)
+                {
+                    for (int j = 0; j < selectedWordLength; j++)
+                    {
+                        blankBoard[randomY + j] = blankBoard[randomY + j].Substring(0, randomX) + wordDirectional[j] + blankBoard[randomY + j].Substring(randomX + 1);
+                    }
+                    continue;
+                }
+                else
+                {
+                    i--;
+                }
+
             }
         }
         static string ReverseWord(string word)
