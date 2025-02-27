@@ -266,9 +266,16 @@
 
             //output 20x20 grid of "."
             Console.WriteLine("Word Search *now with dots!*");
-            //substrings??
+
+            int randomY = 0;
+            int randomX = 0;
+            int wordLength = 0;
+            int spacesOpen = 0;
+            bool wordCanFit = false;
+            int randomPrintDirection;
+
             string[] blankBoard =
-            {
+        {
                 "....................",
                 "....................",
                 "....................",
@@ -292,50 +299,47 @@
                 "....................",
             };
 
-            int randomY = 0;
-            int randomX = 0;
-            int wordLength = 0;
-            int spacesOpen = 0;
-            bool wordCanFit = false;
-            int randomPrintDirection;
-
             foreach (string word in selectedWords)
             {
                 string selectedWordForward = word;
                 string selectedWordBackward = ReverseWord(word);
 
-                randomPrintDirection = 0;//rand.Next(0, 5); //max is exclusive true range is min to max-1
+                randomPrintDirection = rand.Next(0, 4); //max is exclusive true range is min to max-1
 
                 switch (randomPrintDirection)
                 {
                     case 0:
-                        Vertical(randomY, randomX, blankBoard, selectedWordForward, wordLength, spacesOpen, wordCanFit, rand);
+                        Horizontal(randomY, randomX, blankBoard, selectedWordForward, wordLength, spacesOpen, wordCanFit, rand);
                         break;
                     case 1:
                         Horizontal(randomY, randomX, blankBoard, selectedWordBackward, wordLength, spacesOpen, wordCanFit, rand);
+                        break;
+                    case 2:
+                        Vertical(randomY, randomX, blankBoard, selectedWordForward, wordLength, spacesOpen, wordCanFit, rand);
+                        break;
+                    case 3:
+                        Vertical(randomY, randomX, blankBoard, selectedWordBackward, wordLength, spacesOpen, wordCanFit, rand);
                         break;
                 }
             }
             for (int i = 0; i < blankBoard.Length; i++)
             {
                 Console.WriteLine(blankBoard[i]);
-            }
 
+            }
         }
         static void Horizontal(int randomY, int randomX, string[] blankBoard, string wordDirectional, int selectedWordLength, int spacesOpen, bool wordCanFit, Random rand)
         {
-            for (int i = 0; i <= 0; i++)
+            while (true)
             {
                 randomY = rand.Next(0, blankBoard.Length);
                 randomX = rand.Next(0, 20);
                 selectedWordLength = wordDirectional.Length;
 
-
                 spacesOpen = 0;
                 wordCanFit = false;
                 if ((20 - randomX) < selectedWordLength)
                 {
-                    i--;
                     continue;
                 }
                 else
@@ -358,17 +362,17 @@
                 if (wordCanFit == true)
                 {
                     blankBoard[randomY] = blankBoard[randomY].Substring(0, randomX) + wordDirectional + blankBoard[randomY].Substring(randomX + selectedWordLength);
-                    continue;
+                    break;
                 }
                 else
                 {
-                    i--;
+                    continue;
                 }
             }
         }
         static void Vertical(int randomY, int randomX, string[] blankBoard, string wordDirectional, int selectedWordLength, int spacesOpen, bool wordCanFit, Random rand)
         {
-            for (int i = 0; i <= 0; i++)
+            while (true)
             {
                 randomY = rand.Next(0, blankBoard.Length);
                 randomX = rand.Next(0, 20);
@@ -379,7 +383,6 @@
                 wordCanFit = false;
                 if ((20 - randomY) < selectedWordLength)
                 {
-                    i--;
                     continue;
                 }
                 else
@@ -404,11 +407,11 @@
                     {
                         blankBoard[randomY + j] = blankBoard[randomY + j].Substring(0, randomX) + wordDirectional[j] + blankBoard[randomY + j].Substring(randomX + 1);
                     }
-                    continue;
+                    break;
                 }
                 else
                 {
-                    i--;
+                    continue;
                 }
 
             }
