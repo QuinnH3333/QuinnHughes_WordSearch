@@ -275,7 +275,6 @@
                 "....................",
                 "....................",
                 "....................",
-                "....................",
             };
 
             //Place all 8 selected words on the board using 1 of 4 random directions
@@ -302,10 +301,11 @@
                         break;
                 }
             }
+            //Draw board
             for (int i = 0; i < blankBoard.Length; i++)
             {
-                if (i < 10) { Console.WriteLine(i + "  " + blankBoard[i]); }
-                else { Console.WriteLine(i + " " + blankBoard[i]); }
+                if (i < 11) { Console.WriteLine(i + 1 + "  " + blankBoard[i]); }
+                else { Console.WriteLine(i + 1 + " " + blankBoard[i]); }
 
             }
 
@@ -317,16 +317,21 @@
             int guessedY;
             string[] directions = { "up", "down", "forwards", "backwards" };
             int guessedDirection;
+            bool validGuess = false;
 
-            Console.WriteLine("What column (horizontal position) is the beginning of the word?");
-            guessedX = PlayerInputInt(0, blankBoard[1].Length);
-            Console.WriteLine("What Row (Vertical position) is the beginning of the word?");
-            guessedY = PlayerInputInt(0, blankBoard[1].Length);
+            while (validGuess == false)
+            {
+                Console.WriteLine("What column (horizontal position) is the beginning of the word?");
+                guessedX = PlayerInputInt(0, blankBoard[1].Length);
+                Console.WriteLine("What Row (Vertical position) is the beginning of the word?");
+                guessedY = PlayerInputInt(0, blankBoard[1].Length);
 
-            guessedDirection = PlayerInputIndex(directions);
+                guessedDirection = PlayerInputIndex(directions);
 
-            Console.WriteLine(selectedWords[guessedWordIndex] + " " + directions[guessedDirection] + " at " + "(" + guessedX + ", " + guessedY + ")");
-
+                Console.WriteLine(selectedWords[guessedWordIndex] + " " + directions[guessedDirection] + " at " + "(" + guessedX + ", " + guessedY + ")");
+                validGuess = GuessWord(blankBoard, selectedWords[guessedWordIndex], guessedX, guessedY, guessedDirection);
+                Console.WriteLine("You're right?  " + validGuess);
+            }
         }
         /// <summary>
         /// Loops attempting to place a word horizontally without overwriting characters other than ".", exits loop when placing succeeds. 
@@ -522,6 +527,86 @@
             }
 
             return parsedInt;
+        }
+        static bool GuessWord(string[] board, string word, int x, int y, int direction)
+        {
+            //string[] directions = { "up", "down", "forwards", "backwards" }
+            bool isValid = false;
+            int guessedLetters = 0;
+            switch (direction)
+            {
+                //case 0:
+                //    for (int i = 0; i < word.Length; i++)
+                //    {
+                //        if (word.Substring(i, 1) == board[y+i].Substring(x, 1))
+                //        {
+                //            guessedLetters++;
+                //            if (guessedLetters == word.Length)
+                //            {
+                //                isValid = true;
+                //                break;
+                //            }
+                //        }
+                //    }
+                //    break;
+                //    case 1:
+                //    for (int i = 0; i < word.Length; i++)
+                //    {
+                //        if (word.Substring(i, 1) == board[y-1].Substring(x, 1))
+                //        {
+                //            guessedLetters++;
+                //            if (guessedLetters == word.Length)
+                //            {
+                //                isValid = true;
+                //                break;
+                //            }
+                //        }
+                //    }
+                //    break;
+                case 2: //forwards
+                    for (int i = 0; i < word.Length; i++)
+                    {
+                        if ((20 - x) < word.Length)
+                        {
+                            Console.WriteLine("Out of bounds.");
+                            break;
+                        }
+                        if (word.Substring(i, 1) == (board[y - 1].Substring(x - 1 + i, 1)).ToUpper()) //y and x both need -1 since arrays start at 0 not 1
+                        {
+
+                            guessedLetters++;
+                            if (guessedLetters == word.Length)
+                            {
+                                isValid = true;
+                                break;
+                            }
+                        }
+                        //Console.WriteLine((word.Substring(i, 1)) + " vs " + (board[y - 1].Substring(x - 1 + i, 1))); //Remove Debug
+                    }
+                    break;
+                case 3: //Backwards
+                    for (int i = 0; i < word.Length; i++)
+                    {
+                        if ((20 + x) > word.Length)
+                        {
+                            Console.WriteLine("Out of bounds.");
+                            break;
+                        }
+                        if (word.Substring(i, 1) == (board[y - 1].Substring(x - 1 - i, 1)).ToUpper())
+                        {
+                            guessedLetters++;
+                            if (guessedLetters == word.Length)
+                            {
+                                isValid = true;
+                                break;
+                            }
+                        }
+                        //Console.WriteLine((word.Substring(i, 1)) + " vs " + board[y - 1].Substring(x - 1 - i, 1)); //Remove Debug
+                    }
+                    break;
+            }
+
+            return isValid;
         }
     }
 }
