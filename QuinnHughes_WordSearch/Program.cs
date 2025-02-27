@@ -9,7 +9,7 @@
         static void Main(string[] args)
         {
             WriteToFile();
-            StartWS();
+            PlayWordSearch();
         }
         private static void WriteToFile()
         {
@@ -188,17 +188,22 @@
       };
             File.WriteAllLines(wordsFilePath, allWords);
         }
-        static void StartWS()
+        /// <summary>
+        /// Reads words.txt and generates a 20x20 word search with 8 words from the player's selected category. 
+        /// </summary>
+        static void PlayWordSearch()
         {
             string[] allWords = File.ReadAllLines("words.txt");
 
 
-            //Select Category
+            //Declarations for categories and word selection
+            Random rand = new Random();
             bool isValidInput = false;
             int chosenCategoryInt = 0;
             string[] categoryWords = new string[15];
             string[] selectedWords = new string[8];
-            //changing the amount of words in category will also change the location of the category title. The +2 comes from the category title and the "" space. Repeated elsewhere.
+            //changing the amount of words in category will also change the location of the category title.
+            //The +2 comes from the category title and the "" space. Repeated elsewhere.
             string[] categoryNames =
                 {
                 allWords[0],
@@ -213,8 +218,6 @@
                 allWords[9 * (categoryWords.Length + 2)]
             };
 
-            Random rand = new Random();
-
             Console.WriteLine("Choose a category by typing its name exactly:");
             for (int i = 0; i < categoryNames.Length; i++)
             {
@@ -228,8 +231,6 @@
                 {
 
                     chosenCategoryInt = Array.IndexOf(categoryNames, playerInput); //In the array categoryNames, finds the Index number of playerInput
-                    //should remove
-                    Console.WriteLine("You selected category: " + categoryNames[chosenCategoryInt]);
                     isValidInput = true;
                 }
                 else
@@ -242,7 +243,6 @@
             for (int i = 0; i < categoryWords.Length; i++)
             {
                 categoryWords[i] = allWords[(chosenCategoryInt * (categoryWords.Length + 2)) + 1 + i];
-
             }
 
             for (int i = 0; i < selectedWords.Length; i++)
@@ -264,16 +264,15 @@
                 }
             }
 
-            //output 20x20 grid of "."
+            //output 20x20 grid of "." then write the 8 words, cardinal directions
             Console.WriteLine("Word Search *now with dots!*");
-
+            //Declarations for assigning word placements
             int randomY = 0;
             int randomX = 0;
             int wordLength = 0;
             int spacesOpen = 0;
             bool wordCanFit = false;
             int randomPrintDirection;
-
             string[] blankBoard =
         {
                 "....................",
@@ -299,6 +298,7 @@
                 "....................",
             };
 
+            //Place all 8 selected words on the board using 1 of 4 random directions
             foreach (string word in selectedWords)
             {
                 string selectedWordForward = word;
@@ -324,10 +324,24 @@
             }
             for (int i = 0; i < blankBoard.Length; i++)
             {
-                Console.WriteLine(blankBoard[i]);
-
+                Console.WriteLine(i + " " + blankBoard[i]);
             }
+
+            //Player guess
+            //foreach (string word in selectedWords)
+
         }
+        /// <summary>
+        /// Loops attempting to place a word horizontally without overwriting characters other than ".", exits loop when placing succeeds. 
+        /// </summary>
+        /// <param name="randomY">The selected string in the board string array</param>
+        /// <param name="randomX">The selected starting character in the selected string</param>
+        /// <param name="blankBoard">The string array for the board</param>
+        /// <param name="wordDirectional">Selected word to be placed, can be forwards or backwards</param>
+        /// <param name="selectedWordLength">Length of selected word</param>
+        /// <param name="spacesOpen">Number of characters in the selected string checked that were "."</param>
+        /// <param name="wordCanFit">If the word can fit in the spaces chosen or not</param>
+        /// <param name="rand">random</param>
         static void Horizontal(int randomY, int randomX, string[] blankBoard, string wordDirectional, int selectedWordLength, int spacesOpen, bool wordCanFit, Random rand)
         {
             while (true)
@@ -370,6 +384,17 @@
                 }
             }
         }
+        /// <summary>
+        /// Loops attempting to place a word vertically without overwriting characters other than ".", exits loop when placing succeeds. 
+        /// </summary>
+        /// <param name="randomY">The selected string in the board string array</param>
+        /// <param name="randomX">The selected starting character in the selected string</param>
+        /// <param name="blankBoard">The string array for the board</param>
+        /// <param name="wordDirectional">Selected word to be placed, can be forwards or backwards</param>
+        /// <param name="selectedWordLength">Length of selected word</param>
+        /// <param name="spacesOpen">Number of characters in the selected string checked that were "."</param>
+        /// <param name="wordCanFit">If the word can fit in the spaces chosen or not</param>
+        /// <param name="rand">random</param>
         static void Vertical(int randomY, int randomX, string[] blankBoard, string wordDirectional, int selectedWordLength, int spacesOpen, bool wordCanFit, Random rand)
         {
             while (true)
@@ -416,6 +441,11 @@
 
             }
         }
+        /// <summary>
+        /// Reverses the input word and returns it as a string.
+        /// </summary>
+        /// <param name="word"> Input to be reversed </param>
+        /// <returns> the reversed word as a string</returns>
         static string ReverseWord(string word)
         {
             string reversedWord = "";
@@ -425,7 +455,6 @@
             }
             return reversedWord;
         }
-
     }
 }
 
