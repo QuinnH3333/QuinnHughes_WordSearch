@@ -2,200 +2,12 @@
 {
     using System;
     using System.IO;
-    using System.Reflection.Metadata;
-    using static System.Runtime.InteropServices.JavaScript.JSType;
 
     internal class Program
     {
         static void Main(string[] args)
         {
-            //WriteToFile();
-            PlayWordSearch();
-        }
-        private static void WriteToFile()
-        {
-            string wordsFilePath = "words.txt";
-            string[] allWords =
-            {
-          "FairyTailCharacters",
-          "Natsu",
-          "Lucy",
-          "Gray",
-          "Jellal",
-          "Wendy",
-          "Juvia",
-          "Gajeel",
-          "Mirajane",
-          "Happy",
-          "Loki",
-          "Erza",
-          "Laxus",
-          "Cana",
-          "Sting",
-          "Rogue",
-          "",
-          "Zodiacs",
-          "Aries",
-          "Taurus",
-          "Gemini",
-          "Cancer",
-          "Leo",
-          "Virgo",
-          "Libra",
-          "Scorpio",
-          "Sagittarius",
-          "Capricorn",
-          "Aquarius",
-          "Pisces",
-          "Ophiuchus",
-          "Orion",
-          "Cetus",
-          "",
-          "RomanceAnime",
-          "Clannad",
-          "Toradora",
-          "Horimiya",
-          "Nisekoi",
-          "Orange",
-          "MaidSama",
-          "KamisamaKiss",
-          "OHSHC",
-          "FruitsBasket",
-          "SpecialA",
-          "Anohana",
-          "ReLife",
-          "Chihayafuru",
-          "Tonikawa",
-          "SkipBeat",
-          "",
-          "OHSHCCharacters",
-          "Tamaki",
-          "Haruhi",
-          "Kyoya",
-          "Hikaru",
-          "Kaoru",
-          "Honey",
-          "Mori",
-          "Renge",
-          "Nekozawa",
-          "Ranka",
-          "Kasanoda",
-          "Yasuchika",
-          "Satoshi",
-          "Eclair",
-          "Mei",
-          "",
-          "GenshinCharacters",
-          "Raiden",
-          "Zhongli",
-          "Nahida",
-          "Xiao",
-          "Kazuha",
-          "Childe",
-          "Fischl",
-          "Arlecchino",
-          "Wanderer",
-          "Capitano",
-          "Alhaitham",
-          "Yelan",
-          "Neuvillette",
-          "Furina",
-          "Cyno",
-          "",
-          "ShadesOfGreen",
-          "Emerald",
-          "Jade",
-          "Mint",
-          "Olive",
-          "Forest",
-          "Lime",
-          "Teal",
-          "Chartreuse",
-          "Sage",
-          "Moss",
-          "Fern",
-          "Pine",
-          "Seafoam",
-          "Shamrock",
-          "Cypress",
-          "",
-          "VastayanChampions",
-          "Ahri",
-          "Rakan",
-          "Xayah",
-          "Wukong",
-          "Nidalee",
-          "Neeko",
-          "Sett",
-          "Nami",
-          "Rengar",
-          "Aurora",
-          "Yuumi",
-          "Lillia",
-          "Kayn",
-          "Alune",
-          "Lest",
-          "",
-          "YordleChampions",
-          "Teemo",
-          "Tristana",
-          "Veigar",
-          "Lulu",
-          "Heimerdinger",
-          "Poppy",
-          "Corki",
-          "Rumble",
-          "Kennen",
-          "Ziggs",
-          "Fizz",
-          "Amumu",
-          "Kled",
-          "Norra",
-          "Vex",
-          "",
-          "GreekGods",
-          "Zeus",
-          "Hera",
-          "Poseidon",
-          "Demeter",
-          "Athena",
-          "Apollo",
-          "Artemis",
-          "Ares",
-          "Aphrodite",
-          "Hermes",
-          "Hades",
-          "Hestia",
-          "Dionysus",
-          "Persephone",
-          "Nyx",
-          "",
-          "WordsForLove",
-          "Affection",
-          "Adoration",
-          "Devotion",
-          "Passion",
-          "Fondness",
-          "Amour",
-          "Romance",
-          "Desire",
-          "Yearning",
-          "Sentiment",
-          "Tenderness",
-          "Infatuation",
-          "Worship",
-          "Attraction",
-          "Endearment",
-      };
-            File.WriteAllLines(wordsFilePath, allWords);
-        }
-        /// <summary>
-        /// Reads words.txt and generates a 20x20 word search with 8 words from the player's selected category. 
-        /// </summary>
-        static void PlayWordSearch()
-        {
             string[] allWords = File.ReadAllLines("words.txt");
-
 
             //Declarations for categories and word selection
             Random rand = new Random();
@@ -244,8 +56,6 @@
                 }
             }
 
-            //output 20x20 grid of "." then write the 8 words, cardinal directions
-            Console.WriteLine("Word Search *now with dots!*");
             //Declarations for assigning word placements
             int randomY = 0;
             int randomX = 0;
@@ -301,30 +111,31 @@
                         break;
                 }
             }
-            //Draw board
-            for (int i = 0; i < blankBoard.Length; i++)
-            {
-                if (i < 9) { Console.WriteLine(i + 1 + "  " + blankBoard[i]); }
-                else { Console.WriteLine(i + 1 + " " + blankBoard[i]); }
-            }
-            string Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            DrawBoard(blankBoard, rand, Alphabet);
 
             //declarations
             //Player guess
+            string Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string[] cosmeticBoard = GenerateAestheticBoard(blankBoard, rand, Alphabet);
             int guessedWordIndex;
             int guessedX;
             int guessedY;
             string[] directions = { "up", "down", "forwards", "backwards" };
             int guessedDirection;
             //win condition
-            bool validGuess = false;
+            bool isValidGuess = false;
             string[] wordsUnguessed = selectedWords;
             int numberOfWordsGuessed = 0;
+            
 
-
+            //gameplay loop
             while (numberOfWordsGuessed < 8)
             {
+                foreach (string line in cosmeticBoard)
+                {
+                    Console.WriteLine(line);
+                }
+
+                //prompt player
                 guessedWordIndex = PlayerInputIndex(wordsUnguessed);
                 Console.WriteLine("What column (horizontal position) is the beginning letter of the word?");
                 guessedX = PlayerInputInt(1, blankBoard[1].Length);
@@ -333,12 +144,14 @@
                 Console.WriteLine("What direction does the word flow from the first letter to the last?");
                 guessedDirection = PlayerInputIndex(directions);
 
-                Console.WriteLine(wordsUnguessed[guessedWordIndex] + " " + directions[guessedDirection] + " at " + "(" + guessedX + ", " + guessedY + ")");
-                validGuess = isGuessValid(blankBoard, wordsUnguessed[guessedWordIndex], guessedX, guessedY, guessedDirection);
-                //update array with -1 word that was chosen when true, only when true and validGuess++ 
-                Console.WriteLine("You're right?  " + validGuess);
-                if (validGuess)
+                //Output guess and verify
+                Console.WriteLine( "Word: "+ wordsUnguessed[guessedWordIndex] + " at " + "(" + guessedX + ", " + guessedY + ")" + " going: " + directions[guessedDirection]);
+                isValidGuess = GuessVerification(blankBoard, wordsUnguessed[guessedWordIndex], guessedX, guessedY, guessedDirection);
+                
+                //if guess correct, update array
+                if (isValidGuess)
                 {
+                    Console.WriteLine("You guessed right!");
                     numberOfWordsGuessed++;
                     string[] placeholderArray = new string[selectedWords.Length - numberOfWordsGuessed];
                     int x = 0;
@@ -357,7 +170,7 @@
                     wordsUnguessed = placeholderArray;
                 }
             }
-            Console.WriteLine("You found all the words!");
+            Console.WriteLine("You found all the words! Game Over.");
         }
         /// <summary>
         /// Loops attempting to place a word horizontally without overwriting characters other than ".", exits loop when placing succeeds. 
@@ -433,7 +246,6 @@
                 randomY = rand.Next(0, blankBoard.Length);
                 randomX = rand.Next(0, 20);
                 selectedWordLength = wordDirectional.Length;
-
 
                 spacesOpen = 0;
                 wordCanFit = false;
@@ -568,7 +380,7 @@
         /// <param name="y">Guessed Y or row location</param>
         /// <param name="direction">Guessed direction 0-3 </param>
         /// <returns>Bool if a guess was correct (true) or not (false) </returns>
-        static bool isGuessValid(string[] board, string word, int x, int y, int direction)
+        static bool GuessVerification(string[] board, string word, int x, int y, int direction)
         {
             bool isValid = false;
             int guessedLetters = 0;
@@ -584,7 +396,6 @@
                         }
                         if (word.Substring(i, 1) == (board[y - 1 - i].Substring(x - 1, 1)).ToUpper()) //y and x both need -1 since arrays start at 0 not 1
                         {
-
                             guessedLetters++;
                             if (guessedLetters == word.Length)
                             {
@@ -604,7 +415,6 @@
                         }
                         if (word.Substring(i, 1) == (board[y - 1 + i].Substring(x - 1, 1)).ToUpper())
                         {
-
                             guessedLetters++;
                             if (guessedLetters == word.Length)
                             {
@@ -617,14 +427,13 @@
                 case 2: //forwards
                     for (int i = 0; i < word.Length; i++)
                     {
-                        if ((20 - x) < word.Length)
+                        if ((20 - x) < word.Length) //This is fine
                         {
                             Console.WriteLine("Out of bounds.");
                             break;
                         }
                         if (word.Substring(i, 1) == (board[y - 1].Substring(x - 1 + i, 1)).ToUpper())
                         {
-
                             guessedLetters++;
                             if (guessedLetters == word.Length)
                             {
@@ -637,7 +446,7 @@
                 case 3: //Backwards
                     for (int i = 0; i < word.Length; i++)
                     {
-                        if ((20 + x) > word.Length)
+                        if ((x) < word.Length)
                         {
                             Console.WriteLine("Out of bounds.");
                             break;
@@ -656,15 +465,23 @@
             }
             return isValid;
         }
-        static void DrawBoard(string[] board, Random rand, string Alphabet)
+        /// <summary>
+        /// Generates a visually easy to read crossword board
+        /// </summary>
+        /// <param name="board">Source board with words and "."</param>
+        /// <param name="rand">random</param>
+        /// <param name="Alphabet">string with the alphabet</param>
+        /// <returns>String[] with each string being a row</returns>
+        static string[] GenerateAestheticBoard(string[] board, Random rand, string Alphabet) //need to draw once then recall.
         {
-            Console.WriteLine("0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20");
+            string[] newBoard = new string[21];
+            newBoard[0] = "0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20";
             int x = 1;
             foreach (string line in board)
             {
-                if (x < 10) { Console.Write(x + "  "); }
-                else { Console.Write(x + " "); }
-                x++;
+                if (x < 10) { newBoard[x] = x + "  "; }
+                else { newBoard[x] = x + " "; }
+
                 char[] lineArray = line.ToCharArray();
                 for (int i = 0; i < lineArray.Length; i++)
                 {
@@ -676,11 +493,12 @@
                     {
                         lineArray[i] = char.ToUpper(lineArray[i]);
                     }
-                    Console.Write(lineArray[i] + "  ");
+                    newBoard[x] = newBoard[x] + lineArray[i] + "  ";
                 }
-                Console.WriteLine();
-
+                x++;
             }
+            return newBoard;
+
         }
     }
 }
